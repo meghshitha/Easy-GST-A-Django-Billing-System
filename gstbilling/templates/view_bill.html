@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bill - GST Billing System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bill-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .bill-header {
+            border-bottom: 2px solid #002147;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+        .bill-title {
+            color: #002147;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .table th {
+            background-color: #002147;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container bill-container">
+        <div class="bill-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="bill-title">Tax Invoice</h1>
+                    <p><strong>Bill Number:</strong> {{ bill.bill_number }}</p>
+                    <p><strong>Date:</strong> {{ bill.date }}</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h4>{{ user_profile.business_name }}</h4>
+                    <p>GSTIN: {{ user_profile.gstin }}</p>
+                    <p>{{ user_profile.address }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="customer-details mb-4">
+            <h5>Customer Details</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Name:</strong> {{ bill.customer_name }}</p>
+                    <p><strong>Phone:</strong> {{ bill.customer_phone }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Email:</strong> {{ bill.customer_email }}</p>
+                    <p><strong>Address:</strong> {{ bill.customer_address }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>HSN</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>GST %</th>
+                        <th>GST Amount</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in bill_items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.hsn }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹{{ item.price }}</td>
+                        <td>{{ item.gst_rate }}%</td>
+                        <td>₹{{ item.gst_amount }}</td>
+                        <td>₹{{ item.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Subtotal:</strong></td>
+                        <td>₹{{ bill.subtotal }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Total GST:</strong></td>
+                        <td>₹{{ bill.total_gst }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Grand Total:</strong></td>
+                        <td>₹{{ bill.grand_total }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'bill_history' %}" class="btn btn-secondary">Back to Bills</a>
+            <a href="{% url 'download_bill' bill.id %}" class="btn btn-primary">Download PDF</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

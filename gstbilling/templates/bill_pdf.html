@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bill #{{ bill.bill_number }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .header {
+            border-bottom: 2px solid #002147;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        .business-details {
+            text-align: right;
+        }
+        .bill-info {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #002147;
+            color: white;
+        }
+        .totals {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="business-details">
+            <h2>{{ user_profile.business_name }}</h2>
+            <p>GSTIN: {{ user_profile.gstin }}</p>
+            <p>{{ user_profile.address }}</p>
+        </div>
+        <h1>Tax Invoice</h1>
+        <p>Bill Number: {{ bill.bill_number }}</p>
+        <p>Date: {{ bill.date }}</p>
+    </div>
+
+    <div class="bill-info">
+        <h3>Customer Details</h3>
+        <p>Name: {{ bill.customer_name }}</p>
+        <p>Phone: {{ bill.customer_phone }}</p>
+        <p>Email: {{ bill.customer_email }}</p>
+        <p>Address: {{ bill.customer_address }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>HSN</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>GST %</th>
+                <th>GST Amount</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in bill_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.product.hsn }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₹{{ item.price }}</td>
+                <td>{{ item.gst_rate }}%</td>
+                <td>₹{{ item.gst_amount }}</td>
+                <td>₹{{ item.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="totals">
+        <p><strong>Subtotal:</strong> ₹{{ bill.subtotal }}</p>
+        <p><strong>Total GST:</strong> ₹{{ bill.total_gst }}</p>
+        <p><strong>Grand Total:</strong> ₹{{ bill.grand_total }}</p>
+    </div>
+</body>
+</html> 
